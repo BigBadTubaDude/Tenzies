@@ -4,7 +4,10 @@ import Dice from './Dice.js'
 import TopOfScreen from './TopOfScreen.js';
 import React from 'react';
 import {nanoid} from "nanoid"
+import Confetti from "./Confetti.js"
 
+
+const allEqual = arr => arr.every(val => val === arr[0]);
 
 
 function App() {
@@ -20,19 +23,22 @@ function App() {
       array.push(nanoid());
     }
     return array;
-  }
-  )
+  })
+  const [tenziesWon, setTenziesWon] = React.useState(false);
+
+
 
   React.useEffect( () => {
     var initialDiceArray = [1,1,1,1,1,1,1,1,1,1];
     setAllDice();
-  }, []
-  )
+  }, [])
+
   React.useEffect(() => {
-    if (!frozenArray.includes(false)) {
-      console.log("yes")
-    }
+    if (!frozenArray.includes(false) && allEqual(dice)) {
+      setTenziesWon(true);
+    } else setTenziesWon(false)
   },[frozenArray])
+
   function setAllDice() {
     setDice(oldDice => {
       var newArray = [...oldDice];
@@ -59,12 +65,15 @@ const diceHolder =
       )
     })
   function setFreeze(event, idNum) {
-      // console.log(idArray.indexOf(idNum))
-      setFrozenArray( oldFrozenArray => {
-        var newArray = [...oldFrozenArray];
-        newArray[idArray.indexOf(idNum)] = !newArray[idArray.indexOf(idNum)]
-        return newArray;
-      })
+      // console.log(!tenziesWon)
+      if (!tenziesWon){
+        setFrozenArray( oldFrozenArray => {
+          var newArray = [...oldFrozenArray];
+          newArray[idArray.indexOf(idNum)] = !newArray[idArray.indexOf(idNum)]
+          return newArray;
+        })
+      }
+
 
       // setFrozenArray( oldDice => oldDice.map( die => {
         
@@ -73,11 +82,12 @@ const diceHolder =
   
   return (
     <div className="App">
+      {tenziesWon && <Confetti />}
       <div className='actionPanel'>
         <TopOfScreen />
         <section className='diceHolder'>
           {diceHolder}
-          <button className='rollButton' onClick={setAllDice}>Roll</button>
+          <button className='rollButton' onClick={setAllDice}>{tenziesWon ? "New game" : "Roll"}</button>
         </section>
         
       </div>
