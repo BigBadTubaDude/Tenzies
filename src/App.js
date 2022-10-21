@@ -1,10 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
 import Dice from './Dice.js'
 import TopOfScreen from './TopOfScreen.js';
 import React from 'react';
 import {nanoid} from "nanoid"
 import Conf from "./Confetti.js"
+import Rolls from "./Rolls.js"
 
 
 const allEqual = arr => arr.every(val => val === arr[0]);
@@ -25,6 +25,7 @@ function App() {
     return array;
   })
   const [tenziesWon, setTenziesWon] = React.useState(false);
+  const [rolls, setRolls] = React.useState(0);
 
 
 
@@ -49,6 +50,9 @@ function App() {
       } 
       return newArray;
     })
+    if (false) {
+      let x = 0;
+    }
   }
 
 const diceHolder = 
@@ -87,17 +91,22 @@ const diceHolder =
     }
   
   return (
-    <div className="App">
+    <div>
       {tenziesWon && <Conf width={window.innerWidth} height={window.innerHeight}/>}
+      <div className="App">
+      
       <div className='actionPanel'>
         <TopOfScreen />
         <section className='diceHolder'>
           {diceHolder}
+          {/* <Rolls numRolls={rolls}/> */}
           <button className='rollButton' onClick={tenziesWon ? resetGame : setAllDice}>{tenziesWon ? "New game" : "Roll"}</button>
         </section>
         
       </div>
     </div>
+    </div>
+
   );
 }
 
