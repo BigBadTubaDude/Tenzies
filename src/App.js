@@ -4,7 +4,7 @@ import Dice from './Dice.js'
 import TopOfScreen from './TopOfScreen.js';
 import React from 'react';
 import {nanoid} from "nanoid"
-import Confetti from "./Confetti.js"
+import Conf from "./Confetti.js"
 
 
 const allEqual = arr => arr.every(val => val === arr[0]);
@@ -43,7 +43,7 @@ function App() {
     setDice(oldDice => {
       var newArray = [...oldDice];
       for (var i = 0; i < oldDice.length; i++) {
-        if (!frozenArray[i]) {
+        if (!frozenArray[i] || tenziesWon) {
           newArray[i] = Math.floor(Math.random() * 6) + 1;
         }
       } 
@@ -79,15 +79,21 @@ const diceHolder =
         
       // }))
     }
+    function resetGame() {
+      setFrozenArray([false, false, false, false, false, false, false, false, false, false]);
+      setTenziesWon(false);
+      setAllDice();
+
+    }
   
   return (
     <div className="App">
-      {tenziesWon && <Confetti />}
+      {tenziesWon && <Conf width={window.innerWidth} height={window.innerHeight}/>}
       <div className='actionPanel'>
         <TopOfScreen />
         <section className='diceHolder'>
           {diceHolder}
-          <button className='rollButton' onClick={setAllDice}>{tenziesWon ? "New game" : "Roll"}</button>
+          <button className='rollButton' onClick={tenziesWon ? resetGame : setAllDice}>{tenziesWon ? "New game" : "Roll"}</button>
         </section>
         
       </div>
